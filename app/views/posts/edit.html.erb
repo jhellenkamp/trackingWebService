@@ -8,3 +8,63 @@
 <%= link_to 'Back', posts_path %>
 
 </div>
+
+<script type="text/javascript">
+
+//var mouseTimer = window.performance && window.performance.now && window.performance.timing && window.performance.timing.navigationStart ? window.performance.now() + window.performance.timing.navigationStart : Date.now(); 
+//document.onmousemove = function(event) {var mouseTimer = window.performance && window.performance.now && window.performance.timing && window.performance.timing.navigationStart ? window.performance.now() + window.performance.timing.navigationStart : Date.now(); };
+
+var last_time = null;
+var update_time = null;
+
+function get_last_time() {
+	$.get("/posts/<%= @post.id %>/time", function(data, status){
+		last_time = data;
+	});
+	
+	return last_time;
+}
+
+function check() {
+	get_last_time();
+}
+
+
+
+var focused = true;
+
+window.onfocus = function() {
+    focused = true;
+};
+window.onblur = function() {
+    focused = false;
+};
+
+function update_post() {
+	if(focused) {
+		if(last_time != null && update_time != null) {
+			if((last_time-update_time) > 0) {
+				alert("Another user is editing your form");
+				window.location = "/posts";
+			}
+		}
+			$.ajax({
+				type: "POST",
+				url: "/posts/<%= @post.id %>/notify",
+				dataType: 'JSON'
+			}).done(function () {
+				update_time = new Date().getTime()
+			});
+		
+	}
+}
+
+function refresh() {
+	check();
+	update_post();
+	console.log("Last: "+last_time+ " Update: "+update_time);
+}
+
+setInterval(refresh, 2000);
+
+</script>
