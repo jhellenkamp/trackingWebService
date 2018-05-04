@@ -1,6 +1,6 @@
 <div class="container">
 
-<h1>Editing Post</h1>
+<h1>Edit Ticket #<%= @post.id %></h1>
 
 <%= render 'form', post: @post %>
 
@@ -9,10 +9,19 @@
 
 </div>
 
-<script type="text/javascript">
 
-//var mouseTimer = window.performance && window.performance.now && window.performance.timing && window.performance.timing.navigationStart ? window.performance.now() + window.performance.timing.navigationStart : Date.now(); 
-//document.onmousemove = function(event) {var mouseTimer = window.performance && window.performance.now && window.performance.timing && window.performance.timing.navigationStart ? window.performance.now() + window.performance.timing.navigationStart : Date.now(); };
+<div class="bar">
+	<div class="left">MOUSE MOVEMENT</div>
+	<div class="right">KEY PRESS</div>
+</div>
+  
+
+<script type="text/javascript">
+lastMouseMove = new Date().getTime();
+lastKeyPress = new Date().getTime();
+
+document.body.onmousemove = function(){lastMouseMove = new Date().getTime();refreshColor();}; 
+document.body.onkeypress = function(){lastKeyPress = new Date().getTime();refreshColor();}; 
 
 var last_time = null;
 var update_time = null;
@@ -41,28 +50,46 @@ window.onblur = function() {
 };
 
 function update_post() {
-	if(focused) {
-		if(last_time != null && update_time != null) {
-			if((last_time-update_time) > 0) {
-				alert("Another user is editing your form");
-				window.location = "/posts";
-			}
+	if(last_time != null && update_time != null) {
+		if((last_time-update_time) > 6000) {
+			alert("Another user is editing your form");
+			window.location = "/posts";
 		}
+	}
+
+	if(focused && (new Date().getTime() - lastMouseMove) < 10000 && (new Date().getTime() - lastKeyPress) < 10000) {
+		
+		
 			$.ajax({
 				type: "POST",
 				url: "/posts/<%= @post.id %>/notify",
 				dataType: 'JSON'
 			}).done(function () {
-				update_time = new Date().getTime()
+				update_time = new Date().getTime();
 			});
 		
 	}
 }
 
+function refreshColor() {
+	if((new Date().getTime() - lastMouseMove) < 1000) {
+		$(".bar .left").css("background-color", "#00FFFF");
+	} else {
+		$(".bar .left").css("background-color", "#EEEEEE");
+	}
+	
+	if((new Date().getTime() - lastKeyPress) < 1000) {
+		$(".bar .right").css("background-color", "#FF00FF");
+	} else {
+		$(".bar .right").css("background-color", "#EEEEEE");
+	}
+
+}
+
 function refresh() {
 	check();
 	update_post();
-	console.log("Last: "+last_time+ " Update: "+update_time);
+	refreshColor();
 }
 
 setInterval(refresh, 2000);
