@@ -60,6 +60,16 @@ class PostsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  def notify
+	@post = Post.find(params[:id])
+	@post.touch
+  end
+  
+  def time
+	@post = Post.find(params[:id])
+	render plain: @post.updated_at.strftime('%s').to_i*1000, status: :ok
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
