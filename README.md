@@ -14,9 +14,13 @@ It also creates statistics to optimize ticket handling.
 
 ## What it uses:
 
-Javascript, Ajax, REST Api, Ruby, Rails
+Javascript, Ajax, REST Api, Ruby, Rails, sqlite3
 
 --------------------
 
-Build for an Hackathon by the Transfer und Gründerzentrum der RWTH.
+Build for a Hackathon at the Transfer und Gründerzentrum der RWTH.
+Collaborators:
 
+- Fabian Hamm
+- Philipp Braun
+- Jannik Hellenkamp
