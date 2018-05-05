@@ -60,12 +60,12 @@ class PostsController < ApplicationController
       format.json { head :no_content }
     end
   end
-  
+
   def notify
 	@post = Post.find(params[:id])
-	@post.touch
+	@post.update_attributes(:spent_time => params[:time])
   end
-  
+
   def time
 	@post = Post.find(params[:id])
 	render plain: @post.updated_at.strftime('%s').to_i*1000, status: :ok
@@ -79,6 +79,6 @@ class PostsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def post_params
-      params.require(:post).permit(:title, :body)
+      params.require(:post).permit(:title, :body, :spent_time)
     end
 end

@@ -7,6 +7,8 @@
 <%= link_to 'Show', @post %> |
 <%= link_to 'Back', posts_path %>
 
+<div class="timer"></div>
+
 </div>
 
 
@@ -14,23 +16,27 @@
 	<div class="left">MOUSE MOVEMENT</div>
 	<div class="right">KEY PRESS</div>
 </div>
-  
+
 
 <script type="text/javascript">
 lastMouseMove = new Date().getTime();
 lastKeyPress = new Date().getTime();
 
-document.body.onmousemove = function(){lastMouseMove = new Date().getTime();refreshColor();}; 
-document.body.onkeypress = function(){lastKeyPress = new Date().getTime();refreshColor();}; 
+document.body.onmousemove = function(){lastMouseMove = new Date().getTime();refreshColor();};
+document.body.onkeypress = function(){lastKeyPress = new Date().getTime();refreshColor();};
 
+// Lock
 var last_time = null;
 var update_time = null;
+
+// Timer
+var start = <%= @post.spent_time %>;
 
 function get_last_time() {
 	$.get("/posts/<%= @post.id %>/time", function(data, status){
 		last_time = data;
 	});
-	
+
 	return last_time;
 }
 
@@ -49,25 +55,34 @@ window.onblur = function() {
     focused = false;
 };
 
-function update_post() {
+function cross_check() {
+
 	if(last_time != null && update_time != null) {
-		if((last_time-update_time) > 6000) {
+		if((last_time-update_time) > 0) {
 			alert("Another user is editing your form");
-			window.location = "/posts";
+			window.location = "/posts?crossError=1";
 		}
 	}
 
-	if(focused && (new Date().getTime() - lastMouseMove) < 10000 && (new Date().getTime() - lastKeyPress) < 10000) {
-		
-		
-			$.ajax({
-				type: "POST",
-				url: "/posts/<%= @post.id %>/notify",
-				dataType: 'JSON'
-			}).done(function () {
-				update_time = new Date().getTime();
-			});
-		
+}
+
+
+function update_post() {
+
+	cross_check()
+
+	if(focused && ((new Date().getTime() - lastMouseMove) < 10000 || (new Date().getTime() - lastKeyPress) < 10000)) {
+
+		var time =	start;
+
+		$.ajax({
+			type: "POST",
+			url: "/posts/<%= @post.id %>/notify/" + time,
+			dataType: 'JSON'
+		}).done(function () {
+			update_time = new Date().getTime();
+		});
+
 	}
 }
 
@@ -77,7 +92,7 @@ function refreshColor() {
 	} else {
 		$(".bar .left").css("background-color", "#EEEEEE");
 	}
-	
+
 	if((new Date().getTime() - lastKeyPress) < 1000) {
 		$(".bar .right").css("background-color", "#FF00FF");
 	} else {
@@ -93,5 +108,16 @@ function refresh() {
 }
 
 setInterval(refresh, 2000);
+setInterval(cross_check, 2000);
 
+setInterval(function() {
+
+if(focused && ((new Date().getTime() - lastMouseMove) < 10000 || (new Date().getTime() - lastKeyPress) < 10000)) {	
+	start += 1;
+
+  $('.timer').text(start + " sec");
+}
+  
+  
+}, 1000);
 </script>
