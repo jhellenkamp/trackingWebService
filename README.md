@@ -4,7 +4,7 @@ trackingWebService is a service to provide multiuser ticketing including statist
 
 What it does:
 
-trackingWebService implements a platform to create and work on tickets with different peole. It's main functionality is to analyse user activities and block tickets.
+trackingWebService implements a platform to create and work on tickets with different people. It's main functionality is to analyse user activities and block tickets.
 
 How it works:
 
