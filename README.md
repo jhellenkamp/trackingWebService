@@ -24,3 +24,5 @@ Collaborators:
 - Fabian Hamm
 - Philipp Braun
 - Jannik Hellenkamp
+
+The project won the 2nd place.
