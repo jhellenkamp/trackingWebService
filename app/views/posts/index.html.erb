@@ -1,28 +1,10 @@
 <p id="notice"><%= notice %></p>
 
 <div class="container">
-
 <center>
 <%= image_tag("logo_transparent.png", :alt => "logo", :width => 500) %>
-<br>
-<div style="background-color:red">
-<font color="white">
-<script type="text/javascript">
-if(window.location.search.substr(1)=="crossError=1"){
-	document.write("Another user accessed your ticket.");
-}
-window.onfocus = function() {
-	refresh();
-};
-
-function refresh() {
-	window.location = window.location	
-}
-setInterval(refresh, 2000);
-</script>
-</font>
-</div>
 </center>
+
 
 
 <h1>Tickets</h1>
@@ -33,6 +15,7 @@ setInterval(refresh, 2000);
 	  <th>ID</th>
       <th>Title</th>
       <th>Body</th>
+      <th>Time</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -40,12 +23,16 @@ setInterval(refresh, 2000);
   <tbody>
     <% @posts.each do |post| %>
 
-      <tr>
-		<td><%= post.id %></td>
-        <td><%= post.title %></td>
-        <td><%= post.body %></td>
-        <td><%= link_to 'Show', post, target: '_blank' %></td>
-		
+    <tr>
+
+    <td><%= post.id %></td>
+    <td><%= post.title %></td>
+    <td><%= post.body %></td>
+    
+    <td><%= post.spent_time %> sec</td>
+
+    <td><%= link_to 'Show', post, target: '_blank' %></td>
+
 		<% if (Time.now.strftime('%s').to_f - post.updated_at.strftime('%s').to_f) > 15.0 %>
 			<td><%= link_to 'Edit', edit_post_path(post), target: '_blank' %></td>
 			<td><%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -53,22 +40,40 @@ setInterval(refresh, 2000);
 			<td><div class="glyphicon glyphicon-lock"></div></td>
 			<td></td>
 		<% end %>
-		
-      </tr>
-	  
 
-	  
+    </tr>
+
     <% end %>
   </tbody>
 </table>
 
 <br>
 
-<%= link_to 'New Ticket', new_post_path %>
+<%= link_to 'New Ticket', new_post_path, target: '_blank' %>
 
 </div>
 
 
-<script type="text/javascript">
 
-</script>
+
+<div class="error"> 
+<font color="white"> 
+<script type="text/javascript"> 
+if(window.location.search.substr(1)=="crossError=1"){ 
+  document.write("Another user accessed your ticket.");
+  $(".error").css("background-color","#ff0000");
+} else {
+document.write("All systems functional.");
+$(".error").css("background-color", "#ffffff");
+}
+window.onfocus = function() { 
+  refresh(); 
+}; 
+ 
+function refresh() { 
+  window.location = window.location   
+} 
+setInterval(refresh, 2000); 
+</script> 
+</font> 
+</div> 
