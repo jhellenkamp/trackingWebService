@@ -49,17 +49,17 @@ window.onblur = function() {
     focused = false;
 };
 
-function update_post() {
+function cross_check() {
 	if(last_time != null && update_time != null) {
-		if((last_time-update_time) > 6000) {
-			alert("Another user is editing your form");
-			window.location = "/posts";
+		if((last_time-update_time) > 0) {
+			window.location = "/posts?crossError=1";
 		}
 	}
+}
 
-	if(focused && (new Date().getTime() - lastMouseMove) < 10000 && (new Date().getTime() - lastKeyPress) < 10000) {
-		
-		
+function update_post() {
+	cross_check();
+	if(focused && ((new Date().getTime() - lastMouseMove) < 10000 || (new Date().getTime() - lastKeyPress) < 10000)) {
 			$.ajax({
 				type: "POST",
 				url: "/posts/<%= @post.id %>/notify",
@@ -90,8 +90,10 @@ function refresh() {
 	check();
 	update_post();
 	refreshColor();
+	console.log(update_time);
 }
 
 setInterval(refresh, 2000);
+setInterval(cross_check, 500);
 
 </script>

@@ -4,7 +4,26 @@
 
 <center>
 <%= image_tag("logo_transparent.png", :alt => "logo", :width => 500) %>
+<br>
+<div style="background-color:red">
+<font color="white">
+<script type="text/javascript">
+if(window.location.search.substr(1)=="crossError=1"){
+	document.write("Another user accessed your ticket.");
+}
+window.onfocus = function() {
+	refresh();
+};
+
+function refresh() {
+	window.location = window.location	
+}
+setInterval(refresh, 2000);
+</script>
+</font>
+</div>
 </center>
+
 
 <h1>Tickets</h1>
 
@@ -20,10 +39,7 @@
 
   <tbody>
     <% @posts.each do |post| %>
-	
-	
-	
-	
+
       <tr>
 		<td><%= post.id %></td>
         <td><%= post.title %></td>
@@ -54,8 +70,5 @@
 
 
 <script type="text/javascript">
-function refresh() {
-	window.location = "/";
-}
-setInterval(refresh, 2000);
+
 </script>
