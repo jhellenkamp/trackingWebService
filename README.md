@@ -1,24 +1,19 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+trackingWebService is a service to provide multiuser ticketing including statistics to optimize.
 
-Things you may want to cover:
+What it does:
 
-* Ruby version
+trackingWebService implements a platform to create and work on tickets with different peole. It's main functionality is to analyse user activities and block tickets.
 
-* System dependencies
+How it works:
 
-* Configuration
+The platform usesfocus and input tracking to analyse user behavior. It blocks tickets when a user is working on it.
+If a user is not active anymore it unblocks the ticket.
+It also creates statistics to optimize ticket handling.
 
-* Database creation
+What it uses:
 
-* Database initialization
+Javascript, Ajax, REST Api, Ruby, Rails
 
-* How to run the test suite
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
