@@ -63,6 +63,7 @@ function cross_check() {
 			window.location = "/posts?crossError=1";
 		}
 	}
+}
 
 }
 
@@ -105,6 +106,7 @@ function refresh() {
 	check();
 	update_post();
 	refreshColor();
+	console.log(update_time);
 }
 
 setInterval(refresh, 2000);
